@@ -95,3 +95,19 @@ app.get('/api/v1/papers/:id', (request, response) => {
       response.status(500).json({ error });
     });
 });
+
+app.get('/api/v1/footnotes/:paper_id', (request, response) => {
+  database('footnotes').where('paper_id', request.params.paper_id).select()
+    .then(footnotes => {
+      if (footnotes.length) {
+        response.status(200).json(footnotes);
+      } else {
+        response.status(404).json({
+          error: `Could not find paper with id ${request.params.paper_id}`
+        });
+      }
+    })
+    .catch(error => {
+      response.status(500).json({ error });
+    });
+});
